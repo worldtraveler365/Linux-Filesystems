@@ -1,33 +1,12 @@
-# Linux-Filesystems
-Creating Filesystems
-Creating an LVM
-n
-p
-Third section +1G
-t
-8e
-p
-w
-lsblk
+Linux Storage Management (RHCSA EX200)
+This repository serves as a comprehensive technical guide for managing the Linux filesystem lifecycle. It is designed in alignment with the Red Hat Certified System Administrator (RHCSA) EX200 objectives, focusing on persistent storage, Logical Volume Management (LVM), and filesystem integrity.
 
-pvcreate /dev/sdb
-pvs
-pvdisplay
+**Project Scope**
 
-vgcreate vg /dev/sdb1
-vgs
-vgdisplay
+The goal of this project is to demonstrate proficiency in managing block devices, specifically:
 
-lvcreate -n lv -L 800M vg
-lvs
-lvdisplay
+**Creation**: Initializing Physical Volumes (PV), Volume Groups (VG), and Logical Volumes (LV).
+**Expansion**: Non-disruptive extension of volumes and XFS/Ext4 filesystems.
 
-mkfs -t ext4 /dev/mapper/vg-lv
-
-mkdir /directory
-
-vi /etc/fstab
-/dev/mapper/vg-lv /directory ext4 defaults 0 0 
-
-mount -a 
-df -h
+**Reduction**: Safe shrinkage of Ext4 filesystems (noting that XFS cannot be reduced).
+**Persistence**: Proper configuration of /etc/fstab for boot-time mounting.
