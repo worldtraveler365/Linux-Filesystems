@@ -47,14 +47,39 @@ The VG acts as a storage pool, combining one or more PVs.
 
 **The LV is the "virtual partition" where your data actually lives.**
 
-lvcreate -n <lv_name> -L <size> <vg_name>:
+**lvcreate -n <lv_name> -L <size> <vg_name>:**
 
--n: Sets the Name of the logical volume.
+**-n:** Sets the Name of the logical volume.
 
--L: Sets the Logical size (absolute value).
+**-L:** Sets the Logical size (absolute value).
 
 Sizing (800M vs Company Needs): You place the size immediately after the -L flag. Use M for Megabytes, G for Gigabytes, or T for Terabytes. In a professional setting, you only allocate what is currently needed (e.g., 800M) because LVM allows you to grow the volume later as the company grows.
 
 **lvs:** Displays a summary of Logical Volumes.
 
 **lvdisplay:** Displays detailed status including the logical path.
+
+**Filesystem Creation & Mounting**
+
+A Logical Volume is just a "container"; it needs a filesystem to hold files.
+
+**mkfs -t ext4 /dev/mapper/vg-lv:** Formats the volume with the ext4 filesystem (supports shrinking).
+
+**mkfs.xfs /dev/mapper/vg/lv:** Formats the volume with XFS (standard for CentOS/RHEL; high performance).
+
+**mkdir /mnt/data:** Creates a directory (mount point) where the storage will be attached to the Linux file tree.
+
+**Persistence and Verification**
+
+By default, mounts disappear after a reboot. You must make them "persistent."
+
+**/etc/fstab:** The configuration file that lists all disks to be mounted automatically at boot. You add a line following this syntax:
+[Device] [Mount Point] [FS Type] [Options] [Dump] [Check]
+
+**/dev/mapper/vg-lv /mnt/data ext4 defaults 0 0**
+
+
+**mount -a:** Instructs the system to mount all filesystems listed in /etc/fstab. This is a crucial test: if there is a typo in your fstab, this command will catch it before you reboot (preventing a boot failure).
+
+
+**df -h:** Displays Disk Free space in human-readable format. If your volume appears in this list after running mount -a, your filesystem is correctly mounted and persistent.
