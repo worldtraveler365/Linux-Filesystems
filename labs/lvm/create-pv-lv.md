@@ -1,1 +1,1 @@
-
+pvcreate /dev/sdb1
